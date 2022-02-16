@@ -2,18 +2,16 @@ import {
   Body,
   ClassSerializerInterceptor,
   Controller,
-  Get,
+  Request,
   Post,
-  Req,
-  Res,
   UseGuards,
   UseInterceptors,
+  Get,
 } from '@nestjs/common';
-import { Request, Response } from 'express';
 import { RegisterDto } from './models/register.dto';
-import { LoginDto } from './models/login.dto';
 import { AuthService } from './auth.service';
-import { AuthGuard } from './auth.guard';
+import { AuthGuard } from '@nestjs/passport';
+import { LoginDto } from './models/login.dto';
 
 @UseInterceptors(ClassSerializerInterceptor)
 @Controller()
@@ -26,22 +24,13 @@ export class AuthController {
   }
 
   @Post('login')
-  async login(
-    @Body() body: LoginDto,
-    @Res({ passthrough: true }) response: Response,
-  ) {
-    return this.authService.login(body, response);
+  async login(@Body() body: LoginDto) {
+    return this.authService.login(body);
   }
 
-  @UseGuards(AuthGuard)
   @Get('user')
-  async getUserWithCookie(@Req() request: Request) {
-    return this.authService.getUserWithCookie(request);
-  }
-
-  @UseGuards(AuthGuard)
-  @Post('logout')
-  async logout(@Res({ passthrough: true }) response: Response) {
-    return this.authService.logout(response);
+  @UseGuards(AuthGuard('jwt'))
+  async getUserWithToken(@Request() request) {
+    return request.user;
   }
 }

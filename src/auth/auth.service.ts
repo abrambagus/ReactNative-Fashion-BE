@@ -15,6 +15,13 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
+  public getTokenForUser(user: User): string {
+    return this.jwtService.sign({
+      email: user.email,
+      sub: user.id,
+    });
+  }
+
   async register(body): Promise<User> {
     const user = await this.userService.findOne({ email: body.email });
 
@@ -26,13 +33,14 @@ export class AuthService {
       throw new BadRequestException('Password do not match');
     }
     const hashed = await bcrypt.hash(body.password, 12);
-    return this.userService.create({
+    const newUser = await this.userService.create({
       email: body.email,
       password: hashed,
     });
+    return this.userService.findOne(newUser);
   }
 
-  async login(body, response): Promise<User> {
+  async login(body): Promise<{ user: User; token: string }> {
     const user = await this.userService.findOne({ email: body.email });
 
     if (!user) {
@@ -43,26 +51,10 @@ export class AuthService {
       throw new BadRequestException('Invalid credentials');
     }
 
-    const jwt = await this.jwtService.signAsync({ id: user.id });
-
-    response.cookie('jwt', jwt, { httpOnly: true });
-
-    return user;
-  }
-
-  async getUserWithCookie(request): Promise<User> {
-    const cookie = request.cookies['jwt'];
-
-    const data = await this.jwtService.verifyAsync(cookie);
-
-    return this.userService.findOne({ id: data['id'] });
-  }
-
-  async logout(response): Promise<object> {
-    response.clearCookie('jwt');
-
+    const jwt = this.getTokenForUser(user);
     return {
-      message: 'Success',
+      user: user,
+      token: jwt,
     };
   }
 }
