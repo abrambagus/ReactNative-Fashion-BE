@@ -22,14 +22,14 @@ export class AuthService {
     });
   }
 
-  async register(body): Promise<User> {
+  async signUp(body): Promise<User> {
     const user = await this.userService.findOne({ email: body.email });
 
     if (user) {
       throw new BadRequestException('Email already taken');
     }
 
-    if (body.password !== body.password_confirm) {
+    if (body.password !== body.passwordConfirmation) {
       throw new BadRequestException('Password do not match');
     }
     const hashed = await bcrypt.hash(body.password, 12);

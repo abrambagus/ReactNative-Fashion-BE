@@ -8,7 +8,7 @@ import {
   UseInterceptors,
   Get,
 } from '@nestjs/common';
-import { RegisterDto } from './models/register.dto';
+import { SignUpDto } from './models/signUp.dto';
 import { AuthService } from './auth.service';
 import { AuthGuard } from '@nestjs/passport';
 import { LoginDto } from './models/login.dto';
@@ -18,9 +18,9 @@ import { LoginDto } from './models/login.dto';
 export class AuthController {
   constructor(private authService: AuthService) {}
 
-  @Post('register')
-  async register(@Body() body: RegisterDto) {
-    return this.authService.register(body);
+  @Post('signup')
+  async signUp(@Body() body: SignUpDto) {
+    return this.authService.signUp(body);
   }
 
   @Post('login')
