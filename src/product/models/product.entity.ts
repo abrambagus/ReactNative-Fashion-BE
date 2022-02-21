@@ -24,7 +24,10 @@ export class Product {
   @Column()
   price: number;
 
-  @ManyToMany(() => Size, (size) => size.products, { cascade: true })
   @JoinTable()
+  @ManyToMany(() => Size, (size: Size) => size.name, {
+    cascade: true,
+    eager: true,
+  })
   sizes: Size[];
 }

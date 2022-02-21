@@ -1,5 +1,4 @@
-import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { Product } from './product.entity';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('sizes')
 export class Size {
@@ -7,8 +6,5 @@ export class Size {
   id: number;
 
   @Column()
-  size: string;
-
-  @ManyToMany(() => Product, (product) => product.sizes)
-  products: Product[];
+  name: string;
 }
