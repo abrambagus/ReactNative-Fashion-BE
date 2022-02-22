@@ -36,7 +36,7 @@ export class ProductService {
     return await this.productRepository.save(product);
   }
 
-  async getOneProduct(condition: any): Promise<Product> {
+  async getOneProductService(condition: any): Promise<Product> {
     return await this.productRepository.findOne(condition, {
       relations: ['sizes'],
     });
@@ -44,6 +44,42 @@ export class ProductService {
 
   async uploadImageProduct(id: number, data: any): Promise<any> {
     return await this.productRepository.update(id, data);
+  }
+
+  async updateProductService(id: number, data: any): Promise<Product> {
+    const productExist = await this.getOneProductService(id);
+    if (!productExist) {
+      throw new NotFoundException(`Product Doesn't Exist`);
+    }
+
+    const { sizes } = data;
+    if (!sizes) {
+      await this.productRepository.save({ id: id, ...data });
+    } else {
+      const updatedSize = await Promise.all(
+        data.sizes.map(async (size) => {
+          const existSize = await this.sizeRepository.findOne({
+            name: size.name,
+          });
+          if (existSize) {
+            return existSize;
+          } else {
+            throw new NotFoundException(
+              'Size Not Found, Please Create Size First',
+            );
+          }
+        }),
+      );
+      await this.productRepository.save({
+        id: id,
+        name: data.name,
+        brand: data.brand,
+        description: data.description,
+        price: data.price,
+        sizes: updatedSize,
+      });
+    }
+    return this.getOneProductService(id);
   }
 
   async findAllPaginatedProduct(page = 1): Promise<any> {

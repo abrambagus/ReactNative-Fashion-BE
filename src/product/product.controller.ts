@@ -2,11 +2,14 @@ import {
   Body,
   Controller,
   Get,
+  Param,
   ParseIntPipe,
+  Patch,
   Post,
   Query,
 } from '@nestjs/common';
 import { ProductAddDto } from './models/dto/product-add.dto';
+import { ProductUpdateDto } from './models/dto/product-update.dto';
 import { ProductService } from './product.service';
 
 @Controller('product')
@@ -21,5 +24,13 @@ export class ProductController {
   @Post()
   async createProduct(@Body() body: ProductAddDto) {
     return await this.productService.createProductService(body);
+  }
+
+  @Patch('/:id')
+  async updateProduct(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() body: ProductUpdateDto,
+  ) {
+    return await this.productService.updateProductService(id, body);
   }
 }

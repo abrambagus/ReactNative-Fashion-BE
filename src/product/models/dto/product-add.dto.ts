@@ -1,4 +1,4 @@
-import { IsNotEmpty } from 'class-validator';
+import { IsNotEmpty, ValidateNested } from 'class-validator';
 
 class Sizes {
   @IsNotEmpty()
@@ -19,5 +19,6 @@ export class ProductAddDto {
   price: number;
 
   @IsNotEmpty()
+  @ValidateNested({ each: true })
   sizes: Sizes[];
 }

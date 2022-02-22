@@ -1,15 +1,12 @@
 import {
   BadRequestException,
   Controller,
-  Get,
   Param,
   Post,
-  Res,
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { Response } from 'express';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
 import { ProductService } from './product.service';
@@ -37,7 +34,7 @@ export class UploadProductImageController {
     @UploadedFile() file: Express.Multer.File,
     @Param('id') id: number,
   ) {
-    const product = await this.productService.getOneProduct(id);
+    const product = await this.productService.getOneProductService(id);
     if (product) {
       await this.productService.uploadImageProduct(id, {
         image: file.filename,
