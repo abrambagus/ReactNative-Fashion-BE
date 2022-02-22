@@ -28,12 +28,22 @@ export class ProductService {
           return existSize;
         } else {
           throw new NotFoundException(
-            'Size Not Found, Please Create Size first',
+            'Size Not Found, Please Create Size First',
           );
         }
       }),
     );
     return await this.productRepository.save(product);
+  }
+
+  async getOneProduct(condition: any): Promise<Product> {
+    return await this.productRepository.findOne(condition, {
+      relations: ['sizes'],
+    });
+  }
+
+  async uploadImageProduct(id: number, data: any): Promise<any> {
+    return await this.productRepository.update(id, data);
   }
 
   async findAllPaginatedProduct(page = 1): Promise<any> {

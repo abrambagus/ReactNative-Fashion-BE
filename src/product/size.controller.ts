@@ -15,17 +15,17 @@ export class SizeController {
   constructor(private readonly sizeService: SizeService) {}
 
   @Get()
-  getAllSizes() {
-    return this.sizeService.getAllSizesService();
+  async getAllSizes() {
+    return await this.sizeService.getAllSizesService();
   }
 
   @Post()
-  createSize(@Body() body: SizeAddDto) {
-    return this.sizeService.createSizeService(body);
+  async createSize(@Body() body: SizeAddDto) {
+    return await this.sizeService.createSizeService(body);
   }
 
   @Delete('/:id')
-  deleteSize(@Param('id', ParseIntPipe) id: number) {
-    return this.sizeService.deleteSizeService(id);
+  async deleteSize(@Param('id', ParseIntPipe) id: number) {
+    return await this.sizeService.deleteSizeService(id);
   }
 }

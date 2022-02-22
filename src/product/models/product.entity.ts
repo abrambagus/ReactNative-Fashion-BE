@@ -24,6 +24,9 @@ export class Product {
   @Column()
   price: number;
 
+  @Column({ default: 'product-image.png' })
+  image: string;
+
   @JoinTable()
   @ManyToMany(() => Size, (size: Size) => size.name, {
     cascade: true,
