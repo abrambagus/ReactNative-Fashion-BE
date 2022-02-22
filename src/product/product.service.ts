@@ -100,4 +100,16 @@ export class ProductService {
       },
     };
   }
+
+  async deleteProductService(id: number) {
+    const productExist = await this.getOneProductService(id);
+    if (!productExist) {
+      throw new NotFoundException(`Product Doesn't Exist`);
+    }
+
+    const deletedProduct = await this.productRepository.remove(productExist);
+    return {
+      message: `Product ${deletedProduct.name} succefully deleted`,
+    };
+  }
 }

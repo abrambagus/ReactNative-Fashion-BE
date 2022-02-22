@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   ParseIntPipe,
@@ -32,5 +33,10 @@ export class ProductController {
     @Body() body: ProductUpdateDto,
   ) {
     return await this.productService.updateProductService(id, body);
+  }
+
+  @Delete('/:id')
+  async deleteProduct(@Param('id', ParseIntPipe) id: number) {
+    return await this.productService.deleteProductService(id);
   }
 }
