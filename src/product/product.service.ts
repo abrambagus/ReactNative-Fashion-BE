@@ -82,23 +82,10 @@ export class ProductService {
     return this.getOneProductService(id);
   }
 
-  async findAllPaginatedProduct(page = 1): Promise<any> {
-    const take = 10;
-
-    const [products, total] = await this.productRepository.findAndCount({
-      take,
-      skip: (page - 1) * take,
+  async findAllProduct() {
+    return this.productRepository.find({
       relations: ['sizes'],
     });
-
-    return {
-      data: products,
-      meta: {
-        total,
-        page,
-        lastPage: Math.ceil(total / take),
-      },
-    };
   }
 
   async deleteProductService(id: number) {

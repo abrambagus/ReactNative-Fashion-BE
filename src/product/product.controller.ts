@@ -7,7 +7,6 @@ import {
   ParseIntPipe,
   Patch,
   Post,
-  Query,
 } from '@nestjs/common';
 import { ProductAddDto } from './models/dto/product-add.dto';
 import { ProductUpdateDto } from './models/dto/product-update.dto';
@@ -18,8 +17,8 @@ export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
   @Get()
-  async getAllProducts(@Query('page', ParseIntPipe) page = 1) {
-    return await this.productService.findAllPaginatedProduct(page);
+  async getAllProducts() {
+    return await this.productService.findAllProduct();
   }
 
   @Post()
