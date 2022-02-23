@@ -24,11 +24,11 @@ export class Product {
   @Column()
   price: number;
 
-  @Column({ default: 'product-image.png' })
+  @Column({ default: 'no-image-product.png' })
   image: string;
 
   @JoinTable()
-  @ManyToMany(() => Size, (size: Size) => size.name, {
+  @ManyToMany(() => Size, (size: Size) => size.id, {
     cascade: true,
     eager: true,
   })

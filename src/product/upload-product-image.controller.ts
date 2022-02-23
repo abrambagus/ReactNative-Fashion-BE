@@ -1,13 +1,16 @@
 import {
-  BadRequestException,
   Controller,
+  Get,
+  NotFoundException,
   Param,
   Post,
+  Res,
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
+import { Response } from 'express';
 import { extname } from 'path';
 import { ProductService } from './product.service';
 
@@ -43,7 +46,12 @@ export class UploadProductImageController {
         message: 'Upload Image Success',
       };
     } else {
-      throw new BadRequestException('Product Not Found');
+      throw new NotFoundException('Product Not Found');
     }
+  }
+
+  @Get('product-image/:path')
+  async getImageProduct(@Param('path') path: string, @Res() res: Response) {
+    return res.sendFile(path, { root: 'assets/product-images' });
   }
 }

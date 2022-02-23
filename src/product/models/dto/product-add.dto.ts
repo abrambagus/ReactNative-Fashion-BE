@@ -1,3 +1,4 @@
+import { Type } from 'class-transformer';
 import { IsNotEmpty, ValidateNested } from 'class-validator';
 
 class Sizes {
@@ -20,5 +21,6 @@ export class ProductAddDto {
 
   @IsNotEmpty()
   @ValidateNested({ each: true })
+  @Type(() => Sizes)
   sizes: Sizes[];
 }

@@ -1,6 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { ProductAddDto } from './models/dto/product-add.dto';
+import { ProductUpdateDto } from './models/dto/product-update.dto';
 import { Product } from './models/product.entity';
 import { Size } from './models/size.entity';
 
@@ -13,7 +15,7 @@ export class ProductService {
     private readonly sizeRepository: Repository<Size>,
   ) {}
 
-  async createProductService(data: any): Promise<Product> {
+  async createProductService(data: ProductAddDto): Promise<Product> {
     const product = new Product();
     product.name = data.name;
     product.brand = data.brand;
@@ -46,7 +48,10 @@ export class ProductService {
     return await this.productRepository.update(id, data);
   }
 
-  async updateProductService(id: number, data: any): Promise<Product> {
+  async updateProductService(
+    id: number,
+    data: ProductUpdateDto,
+  ): Promise<Product> {
     const productExist = await this.getOneProductService(id);
     if (!productExist) {
       throw new NotFoundException(`Product Doesn't Exist`);
@@ -83,7 +88,7 @@ export class ProductService {
   }
 
   async findAllProduct() {
-    return this.productRepository.find({
+    return await this.productRepository.find({
       relations: ['sizes'],
     });
   }
