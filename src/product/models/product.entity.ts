@@ -3,8 +3,10 @@ import {
   Entity,
   JoinTable,
   ManyToMany,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { ProductOnCart } from '../../cart/models/productOnCart.entity';
 import { Size } from './size.entity';
 
 @Entity('products')
@@ -33,4 +35,9 @@ export class Product {
     eager: true,
   })
   sizes: Size[];
+
+  @OneToMany(() => ProductOnCart, (productOnCart) => productOnCart.product, {
+    cascade: true,
+  })
+  productsOnCart: ProductOnCart[];
 }

@@ -87,7 +87,7 @@ export class ProductService {
     return this.getOneProductService(id);
   }
 
-  async findAllProduct() {
+  async findAllProductService() {
     return await this.productRepository.find({
       relations: ['sizes'],
     });
@@ -107,7 +107,7 @@ export class ProductService {
 
   async searchProductService(keyword: string) {
     if (keyword == '') {
-      return await this.findAllProduct();
+      return await this.findAllProductService();
     }
     const result = await this.productRepository.find({
       relations: ['sizes'],

@@ -19,7 +19,7 @@ export class ProductController {
 
   @Get()
   async getAllProducts() {
-    return await this.productService.findAllProduct();
+    return await this.productService.findAllProductService();
   }
 
   @Post()
