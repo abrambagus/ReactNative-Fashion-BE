@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 import { ProductAddDto } from './models/dto/product-add.dto';
 import { ProductUpdateDto } from './models/dto/product-update.dto';
 import { Product } from './models/product.entity';
@@ -103,5 +103,23 @@ export class ProductService {
     return {
       message: `Product ${deletedProduct.name} succefully deleted`,
     };
+  }
+
+  async searchProductService(keyword: string) {
+    if (keyword == '') {
+      return await this.findAllProduct();
+    }
+    const result = await this.productRepository.find({
+      relations: ['sizes'],
+      where: [
+        { name: Like(`%${keyword}%`) },
+        { description: Like(`%${keyword}%`) },
+      ],
+    });
+
+    if (!result.length) {
+      throw new NotFoundException('Product Not Found');
+    }
+    return result;
   }
 }

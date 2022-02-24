@@ -7,6 +7,7 @@ import {
   ParseIntPipe,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
 import { ProductAddDto } from './models/dto/product-add.dto';
 import { ProductUpdateDto } from './models/dto/product-update.dto';
@@ -37,5 +38,10 @@ export class ProductController {
   @Delete('/:id')
   async deleteProduct(@Param('id', ParseIntPipe) id: number) {
     return await this.productService.deleteProductService(id);
+  }
+
+  @Get('/search')
+  searchProduct(@Query('keyword') keyword: string) {
+    return this.productService.searchProductService(keyword);
   }
 }
