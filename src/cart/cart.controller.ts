@@ -5,9 +5,17 @@ import {
   Request,
   UseInterceptors,
   ClassSerializerInterceptor,
+  Post,
+  Body,
+  Delete,
+  Param,
+  ParseIntPipe,
+  Patch,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { CartService } from './cart.service';
+import { AddItemToCartDto } from './models/dto/add-item-to-cart.dto';
+import { UpdateQuantityDto } from './models/dto/update-quantity.dto';
 
 @Controller('cart')
 export class CartController {
@@ -18,5 +26,26 @@ export class CartController {
   @UseGuards(AuthGuard('jwt'))
   async getAllProducts(@Request() req: any) {
     return await this.cartService.findCartByUserService(req.user.id);
+  }
+
+  @Post()
+  @UseGuards(AuthGuard('jwt'))
+  async addItemToCart(@Request() req: any, @Body() body: AddItemToCartDto) {
+    return this.cartService.addItemToCartService(req.user.id, body);
+  }
+
+  @Patch('/:id')
+  @UseGuards(AuthGuard('jwt'))
+  async editCartById(
+    @Param('id', ParseIntPipe) cartId: number,
+    @Body() body: UpdateQuantityDto,
+  ): Promise<any> {
+    return this.cartService.editQtyByidService(cartId, body);
+  }
+
+  @Delete('/:id')
+  @UseGuards(AuthGuard('jwt'))
+  async deleteCart(@Param('id', ParseIntPipe) cartId: number): Promise<any> {
+    return this.cartService.deleteCartService(cartId);
   }
 }
