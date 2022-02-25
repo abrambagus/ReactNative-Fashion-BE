@@ -6,7 +6,7 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { ProductOnCart } from '../../cart/models/productOnCart.entity';
+import { Cart } from '../../cart/models/cart.entity';
 import { Size } from './size.entity';
 
 @Entity('products')
@@ -36,8 +36,8 @@ export class Product {
   })
   sizes: Size[];
 
-  @OneToMany(() => ProductOnCart, (productOnCart) => productOnCart.product, {
+  @OneToMany(() => Cart, (cart: Cart) => cart.product, {
     cascade: true,
   })
-  productsOnCart: ProductOnCart[];
+  carts: Cart[];
 }

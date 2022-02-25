@@ -105,7 +105,7 @@ export class ProductService {
     };
   }
 
-  async searchProductService(keyword: string) {
+  async searchProductService(keyword: string): Promise<Product[]> {
     if (keyword == '') {
       return await this.findAllProductService();
     }

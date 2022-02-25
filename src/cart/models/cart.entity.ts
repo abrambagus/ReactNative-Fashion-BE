@@ -1,24 +1,38 @@
 import {
+  Column,
   Entity,
   JoinColumn,
-  OneToMany,
-  OneToOne,
+  ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { Product } from '../../product/models/product.entity';
 import { User } from '../../user/models/user.entity';
-import { ProductOnCart } from './productOnCart.entity';
 
-@Entity('carts')
+@Entity()
 export class Cart {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Column()
+  quantity: number;
+
+  @Column()
+  size: string;
+
+  @Column()
+  title: string;
+
+  @Column()
+  price: number;
+
+  @Column()
+  image: string;
+
   @JoinColumn()
-  @OneToOne(() => User, (user: User) => user.cart)
+  @ManyToOne(() => User, (user) => user.carts)
   user: User;
 
-  @OneToMany(() => ProductOnCart, (cartToProduct) => cartToProduct.cart, {
-    cascade: true,
-  })
-  productOnCart: ProductOnCart[];
+  @JoinColumn()
+  @ManyToOne(() => Product, (product) => product.carts)
+  product: Product;
 }

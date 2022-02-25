@@ -1,5 +1,5 @@
 import { Exclude } from 'class-transformer';
-import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Cart } from '../../cart/models/cart.entity';
 
 @Entity('users')
@@ -14,6 +14,8 @@ export class User {
   @Exclude()
   password: string;
 
-  @OneToOne(() => Cart, (cart: Cart) => cart.user, { cascade: true })
-  cart: Cart;
+  @OneToMany(() => Cart, (cart: Cart) => cart.user, {
+    cascade: true,
+  })
+  carts: Cart[];
 }

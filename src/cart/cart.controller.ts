@@ -1,4 +1,12 @@
-import { Controller, Get } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  UseGuards,
+  Request,
+  UseInterceptors,
+  ClassSerializerInterceptor,
+} from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import { CartService } from './cart.service';
 
 @Controller('cart')
@@ -6,12 +14,9 @@ export class CartController {
   constructor(private readonly cartService: CartService) {}
 
   @Get()
-  async getAllProducts() {
-    return await this.cartService.findAllCartService();
-  }
-
-  @Get('products-on-cart')
-  async getAllProductOnCart() {
-    return await this.cartService.findAllProductOnCartService();
+  @UseInterceptors(ClassSerializerInterceptor)
+  @UseGuards(AuthGuard('jwt'))
+  async getAllProducts(@Request() req: any) {
+    return await this.cartService.findCartByUserService(req.user.id);
   }
 }
