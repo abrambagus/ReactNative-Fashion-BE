@@ -20,7 +20,7 @@ export class Cart {
   size: string;
 
   @Column()
-  title: string;
+  name: string;
 
   @Column()
   price: number;

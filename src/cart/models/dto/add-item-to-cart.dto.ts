@@ -11,7 +11,7 @@ export class AddItemToCartDto {
   size: string;
 
   @IsNotEmpty()
-  title: string;
+  name: string;
 
   @IsNotEmpty()
   image: string;

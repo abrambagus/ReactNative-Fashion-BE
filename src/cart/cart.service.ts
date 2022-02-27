@@ -32,7 +32,7 @@ export class CartService {
       },
       quantity: body.quantity,
       size: body.size,
-      title: body.title,
+      name: body.name,
       image: body.image,
       price: body.price,
     });
