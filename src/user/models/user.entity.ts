@@ -1,6 +1,7 @@
 import { Exclude } from 'class-transformer';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Cart } from '../../cart/models/cart.entity';
+import { Transaction } from '../../transaction/models/transaction.entity';
 
 @Entity('users')
 export class User {
@@ -18,4 +19,9 @@ export class User {
     cascade: true,
   })
   carts: Cart[];
+
+  @OneToMany(() => Transaction, (transaction) => transaction.user, {
+    cascade: true,
+  })
+  transactions: Transaction[];
 }

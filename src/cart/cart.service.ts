@@ -52,12 +52,27 @@ export class CartService {
     });
   }
 
-  async deleteCartService(id: number): Promise<Cart> {
+  async deleteCartByIdService(id: number): Promise<Cart> {
     const cartData = await this.cartRepository.findOne({ id });
     if (!cartData) {
       throw new NotFoundException('Cart not found');
     }
 
     return await this.cartRepository.remove(cartData);
+  }
+
+  async deleteCart(userId: number): Promise<any> {
+    const cart = await this.cartRepository.find({
+      relations: ['user', 'product'],
+      where: {
+        user: {
+          id: userId,
+        },
+      },
+    });
+    if (!cart.length) {
+      throw new NotFoundException('Cart not found');
+    }
+    return await this.cartRepository.remove(cart);
   }
 }

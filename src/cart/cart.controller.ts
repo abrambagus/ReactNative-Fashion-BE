@@ -46,6 +46,6 @@ export class CartController {
   @Delete('/:id')
   @UseGuards(AuthGuard('jwt'))
   async deleteCart(@Param('id', ParseIntPipe) cartId: number): Promise<any> {
-    return this.cartService.deleteCartService(cartId);
+    return this.cartService.deleteCartByIdService(cartId);
   }
 }
