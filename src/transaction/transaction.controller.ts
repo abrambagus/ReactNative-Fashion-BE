@@ -9,19 +9,15 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { CartService } from '../cart/cart.service';
 import { TransactionAddDto } from './models/dto/transaction-add.dto';
 import { TransactionService } from './transaction.service';
 
 @Controller('transaction')
+@UseInterceptors(ClassSerializerInterceptor)
 export class TransactionController {
-  constructor(
-    private readonly transactionService: TransactionService,
-    private readonly cartService: CartService,
-  ) {}
+  constructor(private readonly transactionService: TransactionService) {}
 
   @Get()
-  @UseInterceptors(ClassSerializerInterceptor)
   @UseGuards(AuthGuard('jwt'))
   async getTransactionHistory(@Request() req: any) {
     return await this.transactionService.getTransactionService(req.user.id);
