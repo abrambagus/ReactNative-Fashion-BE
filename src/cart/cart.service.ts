@@ -39,15 +39,15 @@ export class CartService {
   }
 
   async editQtyByidService(
-    idCart: number,
+    cartId: number,
     updateQty: UpdateQuantityDto,
   ): Promise<any> {
-    const updateCart = await this.cartRepository.findOne({ id: idCart });
+    const updateCart = await this.cartRepository.findOne({ id: cartId });
     if (!updateCart) {
       throw new NotFoundException('Cart not found');
     }
 
-    return await this.cartRepository.update(idCart, {
+    return await this.cartRepository.update(cartId, {
       quantity: updateQty.quantity,
     });
   }
@@ -61,7 +61,7 @@ export class CartService {
     return await this.cartRepository.remove(cartData);
   }
 
-  async deleteCart(userId: number): Promise<any> {
+  async deleteCartService(userId: number): Promise<any> {
     const cart = await this.cartRepository.find({
       relations: ['user', 'product'],
       where: {

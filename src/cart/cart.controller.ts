@@ -39,13 +39,13 @@ export class CartController {
   async editCartById(
     @Param('id', ParseIntPipe) cartId: number,
     @Body() body: UpdateQuantityDto,
-  ): Promise<any> {
+  ) {
     return this.cartService.editQtyByidService(cartId, body);
   }
 
   @Delete('/:id')
   @UseGuards(AuthGuard('jwt'))
-  async deleteCart(@Param('id', ParseIntPipe) cartId: number): Promise<any> {
+  async deleteCartById(@Param('id', ParseIntPipe) cartId: number) {
     return this.cartService.deleteCartByIdService(cartId);
   }
 }

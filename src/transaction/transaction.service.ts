@@ -27,7 +27,7 @@ export class TransactionService {
     data: TransactionAddDto,
   ): Promise<Transaction> {
     const currentUser = await this.userService.findOne(userId);
-    await this.cartService.deleteCart(userId);
+    await this.cartService.deleteCartService(userId);
     return await this.transactionRepository.save({
       totalPrice: data.totalPrice,
       user: currentUser,

@@ -31,7 +31,7 @@ export class FavouriteController {
     return await this.favouriteService.getAllFavouritesService(req.user.id);
   }
 
-  @Delete(':id')
+  @Delete('/:id')
   @UseGuards(AuthGuard('jwt'))
   async deleteFavouriteById(@Param('id', ParseIntPipe) favId: number) {
     return await this.favouriteService.deleteFavouriteByIdService(favId);
