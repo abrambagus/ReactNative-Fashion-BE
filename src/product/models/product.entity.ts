@@ -7,6 +7,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Cart } from '../../cart/models/cart.entity';
+import { Favourite } from '../../favourite/models/favourite.entity';
 import { Size } from './size.entity';
 
 @Entity('products')
@@ -40,4 +41,9 @@ export class Product {
     cascade: true,
   })
   carts: Cart[];
+
+  @OneToMany(() => Favourite, (favourite) => favourite.product, {
+    cascade: true,
+  })
+  favourites: Favourite[];
 }
