@@ -30,7 +30,7 @@ export class AuthController {
 
   @Get('user')
   @UseGuards(AuthGuard('jwt'))
-  async getUserWithToken(@Request() request) {
-    return request.user;
+  async getUserWithToken(@Request() req: any) {
+    return req.user;
   }
 }
