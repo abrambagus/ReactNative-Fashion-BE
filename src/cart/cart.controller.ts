@@ -31,7 +31,7 @@ export class CartController {
   @Post()
   @UseGuards(AuthGuard('jwt'))
   async addItemToCart(@Request() req: any, @Body() body: AddItemToCartDto) {
-    return this.cartService.addItemToCartService(req.user.id, body);
+    return await this.cartService.addItemToCartService(req.user.id, body);
   }
 
   @Patch('/:id')
@@ -40,12 +40,12 @@ export class CartController {
     @Param('id', ParseIntPipe) cartId: number,
     @Body() body: UpdateQuantityDto,
   ) {
-    return this.cartService.editQtyByidService(cartId, body);
+    return await this.cartService.editQtyByidService(cartId, body);
   }
 
   @Delete('/:id')
   @UseGuards(AuthGuard('jwt'))
   async deleteCartById(@Param('id', ParseIntPipe) cartId: number) {
-    return this.cartService.deleteCartByIdService(cartId);
+    return await this.cartService.deleteCartByIdService(cartId);
   }
 }

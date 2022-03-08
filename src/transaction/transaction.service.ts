@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CartService } from '../cart/cart.service';
@@ -32,5 +32,14 @@ export class TransactionService {
       totalPrice: data.totalPrice,
       user: currentUser,
     });
+  }
+
+  async deleteTransactionByIdService(id: number): Promise<Transaction> {
+    const transactionData = await this.transactionRepository.findOne({ id });
+    if (!transactionData) {
+      throw new NotFoundException('Transaction not found');
+    }
+
+    return await this.transactionRepository.remove(transactionData);
   }
 }

@@ -7,6 +7,9 @@ import {
   Request,
   ClassSerializerInterceptor,
   UseInterceptors,
+  Delete,
+  ParseIntPipe,
+  Param,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { TransactionAddDto } from './models/dto/transaction-add.dto';
@@ -29,6 +32,14 @@ export class TransactionController {
     return await this.transactionService.addTransactionService(
       req.user.id,
       body,
+    );
+  }
+
+  @Delete('/:id')
+  @UseGuards(AuthGuard('jwt'))
+  async deleteTransaction(@Param('id', ParseIntPipe) transactionId: number) {
+    return await this.transactionService.deleteTransactionByIdService(
+      transactionId,
     );
   }
 }
