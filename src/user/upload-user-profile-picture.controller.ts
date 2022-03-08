@@ -5,24 +5,28 @@ import {
   Param,
   Post,
   Res,
+  Request,
   UploadedFile,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { Response } from 'express';
 import { extname } from 'path';
-import { ProductService } from './product.service';
+import { AuthGuard } from '@nestjs/passport';
+import { UserService } from './user.service';
 
-@Controller('product-image')
-export class UploadProductImageController {
-  constructor(private readonly productService: ProductService) {}
+@Controller('profile-picture')
+export class UploadUserProfilePictureController {
+  constructor(private readonly userService: UserService) {}
 
-  @Post('/:id')
+  @Post()
+  @UseGuards(AuthGuard('jwt'))
   @UseInterceptors(
     FileInterceptor('image', {
       storage: diskStorage({
-        destination: './assets/product-images',
+        destination: './assets/profile-pictures',
         filename(_, file, callback) {
           const randomName = Array(32)
             .fill(null)
@@ -35,23 +39,23 @@ export class UploadProductImageController {
   )
   async uploadFile(
     @UploadedFile() file: Express.Multer.File,
-    @Param('id') id: number,
+    @Request() req: any,
   ) {
-    const product = await this.productService.getOneProductService(id);
-    if (product) {
-      await this.productService.uploadImageProduct(id, {
-        image: file.filename,
+    const user = await this.userService.findOne(req.user.id);
+    if (user) {
+      await this.userService.updateUserService(req.user.id, {
+        profilePicture: file.filename,
       });
       return {
         message: 'Upload Image Success',
       };
     } else {
-      throw new NotFoundException('Product Not Found');
+      throw new NotFoundException('User Not Found');
     }
   }
 
   @Get('/:path')
   async getImageProduct(@Param('path') path: string, @Res() res: Response) {
-    return res.sendFile(path, { root: 'assets/product-images' });
+    return res.sendFile(path, { root: 'assets/profile-pictures' });
   }
 }
